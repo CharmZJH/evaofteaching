@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en"> <!--xmlns:th="http://www.thymeleaf.org"-->
+<head>
+    <meta charset="UTF-8">
+    <title>主页面</title>
+
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/img_ver.js"></script>
+    <link type="text/css" rel="stylesheet" href="css/indexcss.css">
+
+</head>
+<body background="images/bg.jpg">
+<div class="logo-box">
+    <div class="login">
+        <h2 style="text-align: center;">学生评教系统</h2>
+        <hr style="margin-bottom: 20px">
+        <div class="bxs-row">
+            <input type="text" class="username" id="account" placeholder="账号" value="">
+            <p class=" err err-username"></p>
+        </div>
+        <div class="bxs-row">
+            <input type="password" class="password" id="password" placeholder="密码">
+            <p class="err err-password"></p>
+        </div>
+        <div class="bxs-row" style="text-align: center;">
+            <label class="radio-inline"><input type="radio" name="mode" value="student">学生</label>
+            <label class="radio-inline"><input type="radio" name="mode" value="teacher">教师</label>
+            <label class="radio-inline"><input type="radio" name="mode" value="admin">管理员</label>
+        </div>
+        <div class="bxs-row">
+            <input type="submit" class="submit btn" value="登录">
+        </div>
+        <div class="bxs-row" style="text-align: center;">
+            <span class="tips" style="color: red;"></span>
+        </div>
+    </div>
+    <div class="verBox">
+        <div id="imgVer" style="display: inline-block;"></div>
+    </div>
+</div>
+
+<script>
+    imgVer({
+        el: '$("#imgVer")',
+        width: '260',
+        height: '116',
+        img: ["images/ver.png", "images/ver-1.png", "images/ver-2.png", "images/ver-3.png"],
+        success: function () {
+            $(".login").css({
+                "left": "0",
+                "opacity": "1"
+            });
+            $(".verBox").css({
+                "left": "404px",
+                "opacity": "0"
+            });
+
+            var account = $("#account").val()
+            var password = $("#password").val()
+            var mode = $("input[name='mode']:checked").val();
+
+            var data = {};
+            data["account"] = account;
+            data["password"] = password;
+            data["mode"] = mode;
+
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "logincheck",
+                contentType: "application/x-www-form-urlencoded;charset=utf-8",
+                data: data,
+                success: function (response) {
+                    if ("登录成功" == response) {
+                        if ("admin" == mode) {
+                            window.location.href = "AdminHome"
+                        } else if ("student" == mode) {
+                            window.location.href = "StudentHome"
+                        } else {
+                            window.location.href = "TeacherHome"
+                        }
+                    } else {
+                        $(".tips").html('账号密码错误');
+                    }
+                },
+                error: function () {
+                    alert("404");
+                }
+            })
+        },
+        error: function () {
+            //alert('错误什么都不执行')
+        }
+    });
+
+    $(".submit").on("click", function () {
+        if ($(".username").val() == "") {
+            $(".err-username").html("用户名不能为空！");
+            $(".err-password").html("");
+        } else if ($(".password").val() == '') {
+            $(".err-password").html("密码不能为空！");
+            $(".err-username").html("");
+        } else {
+            $(".login").css({
+                "left": "-404px",
+                "opacity": "0"
+            });
+            $(".verBox").css({
+                "left": "0",
+                "opacity": "1"
+            })
+        }
+    })
+</script>
+</body>
+</html>

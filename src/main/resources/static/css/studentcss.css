@@ -1,0 +1,25 @@
+
+.divxx {
+    margin: 5px;
+    padding: 5px;
+}
+
+hr{
+    margin:0px;
+    border-top: 1px solid #ddd;
+}
+
+th, td {
+    /*border: 1px solid #6495ED;*/
+    padding: 5px;
+}
+
+.text1{
+    font-size: 16px;
+    width: 50%;
+}
+.text2{
+    border:0px;
+    background:none;
+    width: 30px;
+}
